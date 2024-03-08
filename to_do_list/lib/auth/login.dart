@@ -4,8 +4,8 @@ import 'package:to_do_list/ToDoAppV1.dart';
 import 'package:to_do_list/auth/register.dart';
 
 class Login extends StatefulWidget {
-  final List<UserDataclass> dataList;
-  const Login({super.key, required this.dataList});
+  final List<UserDataclass>? dataList;
+  const Login({super.key,  this.dataList});
 
   @override
   State<Login> createState() => _LoginState();
@@ -116,10 +116,13 @@ class _LoginState extends State<Login> {
                                 _loggloKey.currentState!.validate();
 
                             if (logAllFilled) {
-                              for (UserDataclass obj in widget.dataList) {
+                              bool loggedIn =
+                                  false; // Flag to track if login was successful
+                              for (UserDataclass obj in widget.dataList!) {
                                 if (_loginemailcontroller.text == obj.email &&
                                     _loginpasswordcontroller.text ==
                                         obj.password) {
+                                  loggedIn = true; // Set the flag to true
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text("Login Successful..."),
@@ -128,19 +131,23 @@ class _LoginState extends State<Login> {
                                   _loginemailcontroller.clear();
                                   _loginpasswordcontroller.clear();
                                   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ToDoAppV1(
-                                                uName: obj.name,
-                                              )));
-                                  break;
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ToDoAppV1(
+                                        uName: obj.name,
+                                      ),
+                                    ),
+                                  );
+                                  break; // Break out of the loop once logged in
                                 }
                               }
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Invalid Credentials..."),
-                                ),
-                              );
+                              if (!loggedIn) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Invalid Credentials..."),
+                                  ),
+                                );
+                              }
                             }
                           },
                           child: const Text(

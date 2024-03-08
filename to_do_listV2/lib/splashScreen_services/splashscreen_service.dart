@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:to_do_list/ToDoAppV1.dart';
-import 'package:to_do_list/auth/login.dart';
+import 'package:to_do_list/ToDoAppV2.dart';
 import 'package:to_do_list/auth/register.dart';
 
 class SplashServices {
@@ -10,6 +9,6 @@ class SplashServices {
     Timer(
         const Duration(seconds: 5),
         () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const Login())));
+            context, MaterialPageRoute(builder: (context) => const Register())));
   }
 }

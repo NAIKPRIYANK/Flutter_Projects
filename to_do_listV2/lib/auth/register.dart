@@ -160,13 +160,12 @@ class _RegisterState extends State<Register> {
                               _namecontroller.clear();
                               _emailcontroller.clear();
                               _passwordcontroller.clear();
-                              setState(() {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            Login(dataList: allUsersList)));
-                              });
+                              // setState(() {
+                              //     Navigator.push(
+                              //         context,
+                              //         MaterialPageRoute(
+                              //             builder: (context) =>  Login(dataList:allUsersList)));
+                              //   });
                             }
                           },
                           child: const Text(

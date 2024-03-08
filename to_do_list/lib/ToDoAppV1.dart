@@ -1,11 +1,6 @@
-// import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:to_do_list/auth/login.dart';
-import 'package:to_do_list/auth/register.dart';
-// import 'package:to_do_list/practice2.dart';
 
 class ToDoAppV1 extends StatefulWidget {
   final String uName;
@@ -35,10 +30,11 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // ======================================colorList====================================================================================
   List<Color> caardColors = [
-    const Color.fromRGBO(250, 232, 232, 1),
-    const Color.fromRGBO(232, 237, 250, 1),
-    const Color.fromRGBO(250, 249, 232, 1),
-    const Color.fromRGBO(250, 232, 250, 1),
+    
+    const Color.fromARGB(255, 227, 235, 255),
+    const Color.fromARGB(255, 255, 254, 227),
+    const Color.fromARGB(255, 255, 232, 255),
+    const Color.fromARGB(255, 255, 230, 230),
   ];
   // ==========================================Empty List to store data in obj form=========================================================
   List taskList = [];
@@ -149,6 +145,20 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
     datecontroller.clear();
   }
 
+  // bool flag = false;
+  // Icon taskChecker(bool flag) {
+  //   if (!flag) {
+  //     return const Icon(
+  //       Icons.pending_actions,
+  //       size: 40,
+  //       color: Color.fromRGBO(0, 139, 148, 1),
+  //     );
+  //   } else {
+  //     return const Icon(Icons.task_alt_outlined,
+  //         size: 40, color: Color.fromRGBO(0, 139, 148, 1));
+  //   }
+  // }
+
   //==============================================ShowModelBottomesheet in picture==============================================
   //use optional parameter: is there bottomsheet for editing already added task or adding new task==============================
 
@@ -206,7 +216,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
                               borderSide: BorderSide(
                                   color: Color.fromRGBO(0, 139, 148, 1)),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(5)))),
+                                  BorderRadius.all(Radius.circular(20)))),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please Enter your task";
@@ -234,7 +244,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
                               borderSide: BorderSide(
                                   color: Color.fromRGBO(0, 139, 148, 1)),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(5)))),
+                                  BorderRadius.all(Radius.circular(20)))),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please Enter your task description";
@@ -279,7 +289,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
                               borderSide: BorderSide(
                                   color: Color.fromRGBO(0, 139, 148, 1)),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(5)))),
+                                  BorderRadius.all(Radius.circular(20)))),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please choose date";
@@ -310,7 +320,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
-                            8.0), // Adjust the radius as needed
+                            15), // Adjust the radius as needed
                       ),
                       backgroundColor: const Color.fromRGBO(0, 139, 148, 1),
                       fixedSize: const Size(330, 50)),
@@ -342,206 +352,259 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        actions: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: const BoxDecoration(
+                        color: Colors.white, shape: BoxShape.circle),
+                    child: const Icon(
+                      Icons.logout,
+                      color: Color.fromRGBO(0, 139, 148, 1),
+                    )),
+              ),
+              const Text(
+                "Logout",
+                style: TextStyle(color: Colors.white),
+              )
+            ],
+          ),
+          const SizedBox(
+            width: 10,
+          )
+        ],
         shadowColor: Colors.grey,
-        elevation: 15,
+        // elevation: 15,
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(30))),
-        toolbarHeight: 150,
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
+        toolbarHeight: 120,
         automaticallyImplyLeading: false,
         // centerTitle: true,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 30,
+            ),
             Text(
               "Hello, ",
               style: GoogleFonts.quicksand(
-                  textStyle: TextStyle(
-                      color: Colors.grey.shade200,
+                  textStyle: const TextStyle(
+                      color: Colors.white,
                       fontWeight: FontWeight.w400,
                       fontSize: 30)),
             ),
             Text(
-              widget.uName,
+              "${widget.uName.toUpperCase().trim()}!",
               style: GoogleFonts.notoSerif(
-                  textStyle: TextStyle(
-                      color: Colors.grey.shade200,
+                  textStyle: const TextStyle(
+                      color: Colors.white,
                       fontWeight: FontWeight.w500,
                       fontSize: 40)),
             ),
             const SizedBox(height: 30),
-            Text(
-              "Lets, Plan your day!!! ",
-              style: GoogleFonts.lato(
-                  textStyle: TextStyle(
-                      color: Colors.grey.shade300,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20)),
-            ),
           ],
         ),
-        backgroundColor: const Color.fromRGBO(2, 167, 177, 1),
+        backgroundColor: const Color.fromARGB(255, 1, 172, 181),
       ),
       body: taskList.isNotEmpty
           ? Padding(
-              padding: const EdgeInsets.all(15),
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: taskList.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          boxShadow: const [
-                            BoxShadow(
-                                blurRadius: 8,
-                                color: Color.fromRGBO(0, 0, 0, 0.1),
-                                offset: Offset(0, 10))
-                          ],
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          color: caardColors[index % 4]),
-                      child: Column(
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            // mainAxisAlignment: ,
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                margin: const EdgeInsets.only(top: 15),
-                                height: 52,
-                                width: 52,
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle),
-                                child: Image.asset("assets/images/img.png"),
-                              ),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.all(0),
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(30))),
+                height: 800,
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: taskList.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              boxShadow: const [
+                                BoxShadow(
+                                    blurRadius: 8,
+                                    color: Color.fromRGBO(0, 0, 0, 0.1),
+                                    offset: Offset(0, 10))
+                              ],
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              color: caardColors[index % 4],
+                              // color: Color.fromARGB(255, 255, 255, 255)
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  // mainAxisAlignment: ,
                                   children: [
-                                    Text(
-                                      taskList[index].title,
-                                      style: GoogleFonts.quicksand(
-                                          textStyle: const TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 15)),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      margin: const EdgeInsets.only(top: 15),
+                                      height: 52,
+                                      width: 52,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle),
+                                      child: const Icon(
+                                        Icons.blur_circular_rounded,
+                                        size: 40,
+                                        color: Color.fromRGBO(0, 139, 148, 1),
+                                      ),
                                     ),
                                     const SizedBox(
-                                      height: 10,
+                                      width: 15,
                                     ),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            taskList[index].title,
+                                            style: GoogleFonts.quicksand(
+                                                textStyle: const TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 15)),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            taskList[index].description,
+                                            style: GoogleFonts.quicksand(
+                                                textStyle: const TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 12)),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
                                     Text(
-                                      taskList[index].description,
+                                      taskList[index].date,
                                       style: GoogleFonts.quicksand(
                                           textStyle: const TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 12)),
                                     ),
+                                    const Spacer(
+                                      flex: 10,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        editingTask(taskList[index]);
+                                      },
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            shape: BoxShape.circle),
+                                        height: 35,
+                                        width: 35,
+                                        child: const Icon(
+                                          Icons.edit_outlined,
+                                          size: 20,
+                                          color: Color.fromRGBO(0, 139, 148, 1),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 15,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          deleteTask(taskList[index]);
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            shape: BoxShape.circle),
+                                        height: 35,
+                                        width: 35,
+                                        child: const Icon(Icons.delete_outline,
+                                            size: 20,
+                                            color:
+                                                Color.fromRGBO(0, 139, 148, 1)),
+                                      ),
+                                    )
                                   ],
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                taskList[index].date,
-                                style: GoogleFonts.quicksand(
-                                    textStyle: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12)),
-                              ),
-                              const Spacer(
-                                flex: 10,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  editingTask(taskList[index]);
-                                },
-                                child: const Icon(
-                                  Icons.edit_outlined,
-                                  size: 20,
-                                  color: Color.fromRGBO(0, 139, 148, 1),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    deleteTask(taskList[index]);
-                                  });
-                                },
-                                child: const Icon(Icons.delete_outline,
-                                    size: 20,
-                                    color: Color.fromRGBO(0, 139, 148, 1)),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    );
-                  }),
+                        );
+                      }),
+                ),
+              ),
             )
           : Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset("assets/images/noTaskpng.png"),
-                    Text(
-                      "No task available!!!",
-                      style: GoogleFonts.quicksand(
-                          textStyle: const TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 25)),
-                    ),
-                  ]),
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(30))),
+                // height: 800,
+                width: double.infinity,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "assets/images/noTaskpng.png",
+                        height: 170,
+                        width: 400,
+                      ),
+                      Text(
+                        "No task available!!!",
+                        style: GoogleFonts.quicksand(
+                            textStyle: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w300,
+                                fontSize: 25)),
+                      ),
+                    ]),
+              ),
             ),
-      floatingActionButton: Row(
-        children: [
-          const SizedBox(
-            width: 35,
-          ),
-          FloatingActionButton(
-            shape: const CircleBorder(eccentricity: 0.1),
-            backgroundColor: const Color.fromRGBO(0, 139, 148, 1),
-            onPressed: () {
-              setState(() {
-                Navigator.pop(context);
-              });
-            },
-            child: const Icon(
-              Icons.logout,
-              color: Colors.white,
-            ),
-          ),
-          const Spacer(
-            flex: 6,
-          ),
-          FloatingActionButton(
-            shape: const CircleBorder(eccentricity: 0.1),
-            backgroundColor: const Color.fromRGBO(0, 139, 148, 1),
-            onPressed: () {
-              setState(() {
-                clearField();
-              });
-              _bottomsheetshower(true);
-            },
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(eccentricity: 0.1),
+        backgroundColor: const Color.fromRGBO(0, 139, 148, 1),
+        onPressed: () {
+          setState(() {
+            clearField();
+          });
+          _bottomsheetshower(true);
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 50,
+        ),
       ),
     );
   }

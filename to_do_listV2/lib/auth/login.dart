@@ -1,28 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:to_do_list/auth/login.dart';
+import 'package:to_do_list/ToDoAppV2.dart';
+import 'package:to_do_list/auth/register.dart';
 
-class Register extends StatefulWidget {
-  const Register({super.key});
+class Login extends StatefulWidget {
+  final List<UserDataclass> dataList;
+  const Login({super.key, required this.dataList});
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<Login> createState() => _LoginState();
 }
 
-class UserDataclass {
-  String name;
-  String email;
-  String password;
-  UserDataclass(
-      {required this.name, required this.email, required this.password});
-}
-
-class _RegisterState extends State<Register> {
-  final TextEditingController _namecontroller = TextEditingController();
-  final TextEditingController _emailcontroller = TextEditingController();
-  final TextEditingController _passwordcontroller = TextEditingController();
-  final GlobalKey<FormState> _gloKey = GlobalKey<FormState>();
-  List<UserDataclass> allUsersList = [];
+class _LoginState extends State<Login> {
+  final TextEditingController _loginemailcontroller = TextEditingController();
+  final TextEditingController _loginpasswordcontroller =
+      TextEditingController();
+  final GlobalKey<FormState> _loggloKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +26,9 @@ class _RegisterState extends State<Register> {
             const SizedBox(
               height: 50,
             ),
-            Image.asset("assets/images/signin.png"),
+            Image.asset("assets/images/login.png"),
             Text(
-              "Register Here",
+              "Login Here",
               style: GoogleFonts.quicksand(
                 fontSize: 30,
                 fontWeight: FontWeight.w700,
@@ -47,41 +40,15 @@ class _RegisterState extends State<Register> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: Form(
-                  key: _gloKey,
+                  key: _loggloKey,
                   child: Column(
                     children: [
-                      TextFormField(
-                        keyboardType: TextInputType.name,
-                        controller: _namecontroller,
-                        decoration: const InputDecoration(
-                            contentPadding:
-                                EdgeInsets.only(left: 20, right: 20),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
-                                borderSide: BorderSide(
-                                    color: Color.fromRGBO(0, 139, 148, 1))),
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30))),
-                            labelStyle: TextStyle(
-                                // fontStyle: FontStyle.italic,
-                                color: Color.fromRGBO(0, 139, 148, 1)),
-                            labelText: "Enter your name"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please Enter your name";
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
                       const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
-                        controller: _emailcontroller,
+                        controller: _loginemailcontroller,
                         decoration: const InputDecoration(
                             focusedBorder: OutlineInputBorder(
                                 borderRadius:
@@ -112,7 +79,7 @@ class _RegisterState extends State<Register> {
                         maxLength: 8,
                         obscureText: true,
                         obscuringCharacter: "*",
-                        controller: _passwordcontroller,
+                        controller: _loginpasswordcontroller,
                         decoration: const InputDecoration(
                             focusedBorder: OutlineInputBorder(
                                 borderRadius:
@@ -130,7 +97,7 @@ class _RegisterState extends State<Register> {
                             labelText: "Enter your password"),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Please create your password";
+                            return "Please Enter your password";
                           } else {
                             return null;
                           }
@@ -145,32 +112,39 @@ class _RegisterState extends State<Register> {
                               backgroundColor:
                                   const Color.fromRGBO(0, 139, 148, 1)),
                           onPressed: () {
-                            bool regallfieldfilled =
-                                _gloKey.currentState!.validate();
-                            if (regallfieldfilled) {
-                              allUsersList.add(UserDataclass(
-                                  name: _namecontroller.text,
-                                  email: _emailcontroller.text,
-                                  password: _passwordcontroller.text));
+                            bool logAllFilled =
+                                _loggloKey.currentState!.validate();
 
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text("Registration Successful..."),
-                              ));
-                              _namecontroller.clear();
-                              _emailcontroller.clear();
-                              _passwordcontroller.clear();
-                              setState(() {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            Login(dataList: allUsersList)));
-                              });
+                            if (logAllFilled) {
+                              for (UserDataclass obj in widget.dataList) {
+                                if (_loginemailcontroller.text == obj.email &&
+                                    _loginpasswordcontroller.text ==
+                                        obj.password) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Login Successful..."),
+                                    ),
+                                  );
+                                  _loginemailcontroller.clear();
+                                  _loginpasswordcontroller.clear();
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => ToDoAppV1(
+                                  //               uName: obj.name,
+                                  //             )));
+                                  break;
+                                }
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Invalid Credentials..."),
+                                ),
+                              );
                             }
                           },
                           child: const Text(
-                            "Register",
+                            "Login",
                             style: TextStyle(color: Colors.white, fontSize: 25),
                           )),
                       const SizedBox(
@@ -179,19 +153,17 @@ class _RegisterState extends State<Register> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Already have an account?"),
+                          const Text("Don't hava an account ?"),
                           TextButton(
                               onPressed: () {
-                                setState(() {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              Login(dataList: allUsersList)));
-                                });
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Register()));
                               },
                               child: const Text(
-                                "Login",
+                                "Register",
                                 style: TextStyle(
                                     color: Color.fromRGBO(0, 139, 148, 1)),
                               ))
