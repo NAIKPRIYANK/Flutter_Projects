@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:to_do_list/main.dart';
 
 class ToDoAppV1 extends StatefulWidget {
   final String uName;
@@ -14,11 +15,20 @@ class ToDoAppV1 extends StatefulWidget {
 //========================================Model Class:To Store data in obj and pass to the list ==========================================
 
 class ModelClassTodo {
+  
   String title;
   String description;
   String date;
   ModelClassTodo(
       {required this.title, required this.description, required this.date});
+
+  Map<String, String> getMap() {
+    return {
+      'title': title,
+      'description': description,
+      'date': date,
+    };
+  }
 }
 
 class _ToDoAppV1State extends State<ToDoAppV1> {
@@ -30,35 +40,43 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // ======================================colorList====================================================================================
   List<Color> caardColors = [
-    
     const Color.fromARGB(255, 227, 235, 255),
     const Color.fromARGB(255, 255, 254, 227),
     const Color.fromARGB(255, 255, 232, 255),
     const Color.fromARGB(255, 255, 230, 230),
   ];
   // ==========================================Empty List to store data in obj form=========================================================
-  List taskList = [];
+  List taskList = taskDataList;
 
   //=========================================Submit function by a conditions==============================================================
   //Use Optional parameter: useful for satisfying requirement as of is there submit button for adding new task or editing already added task
-  void onSubmit(bool addTask, [ModelClassTodo? todoObj]) {
+  void onSubmit(bool addTask, [ModelClassTodo? todoObj]) async {
     if (titlecontroller.text.trim().isNotEmpty &&
         descriptioncontroller.text.trim().isNotEmpty &&
         datecontroller.text.trim().isNotEmpty) {
+      ModelClassTodo obj = ModelClassTodo(
+          title: titlecontroller.text.trim(),
+          description: descriptioncontroller.text.trim(),
+          date: datecontroller.text.trim());
       if (addTask) {
+        await insertData(obj);
+        taskList = await getData();
         setState(() {
-          taskList.add(
-            ModelClassTodo(
-                title: titlecontroller.text.trim(),
-                description: descriptioncontroller.text.trim(),
-                date: datecontroller.text.trim()),
-          );
+          if (taskList.isNotEmpty) {
+            emptyList = false;
+          }
         });
       } else {
+        obj = ModelClassTodo(
+            title: titlecontroller.text,
+            description: descriptioncontroller.text,
+            date: datecontroller.text);
+        await taskUpdate(obj);
+        taskList = await getData();
         setState(() {
-          todoObj!.title = titlecontroller.text.trim();
-          todoObj.description = descriptioncontroller.text.trim();
-          todoObj.date = datecontroller.text.trim();
+          // todoObj!.title = titlecontroller.text.trim();
+          // todoObj.description = descriptioncontroller.text.trim();
+          // todoObj.date = datecontroller.text.trim();
         });
       }
       clearField();
@@ -78,7 +96,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
 
   //==========================================To delete obj directly from a list===================================================
 
-  void deleteTask(ModelClassTodo todoObj) {
+  void deleteTask(ModelClassTodo todoObj) async {
     _showMyDialog(todoObj);
   }
 
@@ -109,7 +127,9 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
                   onPressed: () {
                     Navigator.of(context).pop();
                     if (taskList.isEmpty) {
-                      setState(() {});
+                      setState(() {
+                        emptyList = true;
+                      });
                     }
                   },
                 ),
@@ -121,11 +141,15 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
                     'Yes',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    await deleteTasks(todoObj.title);
+                    taskList = await getData();
+
                     setState(() {
-                      taskList.remove(todoObj);
                       Navigator.of(context).pop();
-                      if (taskList.isEmpty) {}
+                      if (taskList.isEmpty) {
+                        emptyList = true;
+                      }
                     });
                   },
                 ),
@@ -351,6 +375,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
   //====================================================buid method call=========================================================
   @override
   Widget build(BuildContext context) {
+    print("$taskList///////////////////////////////////////////////");
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -416,7 +441,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
         ),
         backgroundColor: const Color.fromARGB(255, 1, 172, 181),
       ),
-      body: taskList.isNotEmpty
+      body: !emptyList
           ? Padding(
               padding: const EdgeInsets.all(0),
               child: Container(
