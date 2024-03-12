@@ -15,40 +15,57 @@ class ToDoAppV1 extends StatefulWidget {
 //========================================Model Class:To Store data in obj and pass to the list ==========================================
 
 class ModelClassTodo {
-  
+  int? taskid;
+
   String title;
   String description;
   String date;
   ModelClassTodo(
-      {required this.title, required this.description, required this.date});
+      {
+      this.taskid,
+      required this.title,
+      required this.description,
+      required this.date});
 
-  Map<String, String> getMap() {
+  Map<String, dynamic> getMap() {
     return {
+      'taskid': taskid,
       'title': title,
       'description': description,
       'date': date,
     };
   }
+
+  @override
+  String toString() {
+    return '{taskid:$taskid,title:$title,description:$description,date:$date}';
+  }
 }
 
 class _ToDoAppV1State extends State<ToDoAppV1> {
   //=========================TextEditingController :To store data from textfields=======================================================
+
   TextEditingController titlecontroller = TextEditingController();
   TextEditingController descriptioncontroller = TextEditingController();
   TextEditingController datecontroller = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   // ======================================colorList====================================================================================
+
   List<Color> caardColors = [
     const Color.fromARGB(255, 227, 235, 255),
     const Color.fromARGB(255, 255, 254, 227),
     const Color.fromARGB(255, 255, 232, 255),
     const Color.fromARGB(255, 255, 230, 230),
   ];
-  // ==========================================Empty List to store data in obj form=========================================================
+  // ==========================================Empty List to store data in obj form======================================================
+
   List taskList = taskDataList;
 
   //=========================================Submit function by a conditions==============================================================
+
+
   //Use Optional parameter: useful for satisfying requirement as of is there submit button for adding new task or editing already added task
   void onSubmit(bool addTask, [ModelClassTodo? todoObj]) async {
     if (titlecontroller.text.trim().isNotEmpty &&
@@ -62,12 +79,14 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
         await insertData(obj);
         taskList = await getData();
         setState(() {
+          Navigator.of(context).pop();
           if (taskList.isNotEmpty) {
             emptyList = false;
           }
         });
       } else {
         obj = ModelClassTodo(
+            taskid: todoObj?.taskid,
             title: titlecontroller.text,
             description: descriptioncontroller.text,
             date: datecontroller.text);
@@ -77,21 +96,23 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
           // todoObj!.title = titlecontroller.text.trim();
           // todoObj.description = descriptioncontroller.text.trim();
           // todoObj.date = datecontroller.text.trim();
+          Navigator.of(context).pop();
         });
       }
       clearField();
-
-      Navigator.of(context).pop();
     }
   }
 
   //=========================================To edit task=========================================================================
 
   void editingTask(ModelClassTodo todoObj) {
+    
+    // print(
+    //     "${todoObj.taskid}---------------------------------------------------------------------------------");
     titlecontroller.text = todoObj.title;
     descriptioncontroller.text = todoObj.description;
     datecontroller.text = todoObj.date;
-    _bottomsheetshower(false, todoObj);
+    _bottomsheetshower(false,todoObj);
   }
 
   //==========================================To delete obj directly from a list===================================================
@@ -103,6 +124,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
   // =========================================Dialouge box for confirmation of delete task==========================================
 
   Future<void> _showMyDialog(ModelClassTodo todoObj) async {
+    
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -142,7 +164,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    await deleteTasks(todoObj.title);
+                    await deleteTasks(todoObj.taskid);
                     taskList = await getData();
 
                     setState(() {
@@ -187,6 +209,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
   //use optional parameter: is there bottomsheet for editing already added task or adding new task==============================
 
   void _bottomsheetshower(bool addtask, [ModelClassTodo? todoObj]) {
+    
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -331,6 +354,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
               ElevatedButton(
                   onPressed: () {
                     bool allfieldfilled = _formKey.currentState!.validate();
+
                     if (allfieldfilled) {
                       addtask ? onSubmit(addtask) : onSubmit(addtask, todoObj);
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -372,10 +396,12 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
     );
   }
 
+  
+
   //====================================================buid method call=========================================================
+
   @override
   Widget build(BuildContext context) {
-    print("$taskList///////////////////////////////////////////////");
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
