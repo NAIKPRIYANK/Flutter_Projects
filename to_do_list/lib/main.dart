@@ -8,8 +8,7 @@ import 'package:sqflite/sqflite.dart';
 
 // import 'package:to_do_list/practice2.dart';
 dynamic database;
-List<ModelClassTodo> taskDataList = [];
-bool emptyList = true;
+// List<ModelClassTodo> taskDataList = [];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -28,11 +27,11 @@ void main() async {
 ''');
     },
   );
-  taskDataList = await getData();
-  if (taskDataList.isNotEmpty) {
-    emptyList = false;
-  }
-  runApp(const MyApp());
+  List<ModelClassTodo> taskDataList = await getData();
+  // if (taskDataList.isNotEmpty) {
+  //   emptyList = false;
+  // }
+  runApp( MyApp(taskDataList:taskDataList));
 }
 
 
@@ -79,16 +78,17 @@ Future taskUpdate(ModelClassTodo obj) async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final List<ModelClassTodo> taskDataList; 
+  const MyApp({super.key,required this.taskDataList});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
 
-      home: ToDoAppV1(uName: "Priyank"),
+      home: ToDoAppV1(uName: "Priyank",taskDataList: taskDataList,),
       // home: Register(),
     );
   }

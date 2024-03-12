@@ -4,8 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:to_do_list/main.dart';
 
 class ToDoAppV1 extends StatefulWidget {
+  final List<ModelClassTodo> taskDataList;
   final String uName;
-  const ToDoAppV1({super.key, required this.uName});
+  const ToDoAppV1({super.key, required this.uName, required this.taskDataList});
   @override
   State<ToDoAppV1> createState() {
     return _ToDoAppV1State();
@@ -21,8 +22,7 @@ class ModelClassTodo {
   String description;
   String date;
   ModelClassTodo(
-      {
-      this.taskid,
+      {this.taskid,
       required this.title,
       required this.description,
       required this.date});
@@ -43,6 +43,13 @@ class ModelClassTodo {
 }
 
 class _ToDoAppV1State extends State<ToDoAppV1> {
+  List<ModelClassTodo> taskList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    taskList = widget.taskDataList;
+  }
   //=========================TextEditingController :To store data from textfields=======================================================
 
   TextEditingController titlecontroller = TextEditingController();
@@ -61,10 +68,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
   ];
   // ==========================================Empty List to store data in obj form======================================================
 
-  List taskList = taskDataList;
-
   //=========================================Submit function by a conditions==============================================================
-
 
   //Use Optional parameter: useful for satisfying requirement as of is there submit button for adding new task or editing already added task
   void onSubmit(bool addTask, [ModelClassTodo? todoObj]) async {
@@ -80,9 +84,9 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
         taskList = await getData();
         setState(() {
           Navigator.of(context).pop();
-          if (taskList.isNotEmpty) {
-            emptyList = false;
-          }
+          // if (taskList.isNotEmpty) {
+          //   emptyList = false;
+          // }
         });
       } else {
         obj = ModelClassTodo(
@@ -106,13 +110,12 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
   //=========================================To edit task=========================================================================
 
   void editingTask(ModelClassTodo todoObj) {
-    
     // print(
     //     "${todoObj.taskid}---------------------------------------------------------------------------------");
     titlecontroller.text = todoObj.title;
     descriptioncontroller.text = todoObj.description;
     datecontroller.text = todoObj.date;
-    _bottomsheetshower(false,todoObj);
+    _bottomsheetshower(false, todoObj);
   }
 
   //==========================================To delete obj directly from a list===================================================
@@ -124,7 +127,6 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
   // =========================================Dialouge box for confirmation of delete task==========================================
 
   Future<void> _showMyDialog(ModelClassTodo todoObj) async {
-    
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -150,7 +152,6 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
                     Navigator.of(context).pop();
                     if (taskList.isEmpty) {
                       setState(() {
-                        emptyList = true;
                       });
                     }
                   },
@@ -169,9 +170,9 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
 
                     setState(() {
                       Navigator.of(context).pop();
-                      if (taskList.isEmpty) {
-                        emptyList = true;
-                      }
+                      // if (taskList.isEmpty) {
+                      //   emptyList = true;
+                      // }
                     });
                   },
                 ),
@@ -209,7 +210,6 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
   //use optional parameter: is there bottomsheet for editing already added task or adding new task==============================
 
   void _bottomsheetshower(bool addtask, [ModelClassTodo? todoObj]) {
-    
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -396,8 +396,6 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
     );
   }
 
-  
-
   //====================================================buid method call=========================================================
 
   @override
@@ -467,7 +465,7 @@ class _ToDoAppV1State extends State<ToDoAppV1> {
         ),
         backgroundColor: const Color.fromARGB(255, 1, 172, 181),
       ),
-      body: !emptyList
+      body: taskList.isNotEmpty
           ? Padding(
               padding: const EdgeInsets.all(0),
               child: Container(

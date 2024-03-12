@@ -134,7 +134,7 @@ class _LoginState extends State<Login> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ToDoAppV1(
-                                        uName: obj.name,
+                                        uName: obj.name,taskDataList: [],
                                       ),
                                     ),
                                   );
